@@ -30,17 +30,19 @@ exports.getEditProduct = async (req, res, next) => {
     return res.redirect("/");
   }
   const prodId = req.params.productId;
-  await Product.findById(prodId).then((products) => {
-    if (!products) {
-      return res.redirect("/");
-    }
-    res.render("admin/edit-product", {
-      pageTitle: "Edit Product",
-      path: "/admin/edit-product",
-      editing: editMode,
-      product: product,
-    });
-  });
+  Product.findById(prodId)
+    .then((product) => {
+      if (!product) {
+        return res.redirect("/");
+      }
+      res.render("admin/edit-product", {
+        pageTitle: "Edit Product",
+        path: "/admin/edit-product",
+        editing: editMode,
+        product: product,
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postEditProduct = async (req, res, next) => {
@@ -80,6 +82,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteById(prodId);
-  res.redirect("/admin/products");
+  Product.findByIdAndRemove(prodId).then(() => {
+    res.redirect("/admin/products");
+  });
 };
