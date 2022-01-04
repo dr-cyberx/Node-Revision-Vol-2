@@ -9,11 +9,18 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = async (req, res, next) => {
+  console.log(req.user);
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = await new Product({ title, imageUrl, description, price });
+  const product = await new Product({
+    title,
+    imageUrl,
+    description,
+    price,  
+    userId: req.user._id,
+  });
   product
     .save()
     .then((data) => {
