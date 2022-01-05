@@ -39,7 +39,7 @@ exports.getCart = async (req, res, next) => {
   // .then((user) => {
   console.log(response.cart.items);
   const products = [...response.cart.items];
-  console.log(products)
+  console.log(products);
   res.render("shop/cart", {
     path: "shop/cart",
     pageTitle: "Your cart",
@@ -60,13 +60,13 @@ exports.postCart = (req, res, next) => {
     });
 };
 
-// exports.postCartDeleteProduct = (req, res, next) => {
-//   const prodId = req.body.productId;
-//   Product.findById(prodId, product => {
-//     Cart.deleteProduct(prodId, product.price);
-//     res.redirect('/cart');
-//   });
-// };
+exports.postCartDeleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+
+  req.user.removeFromCart(prodId).then((result) => {
+    res.redirect("/");
+  });
+};
 
 // exports.getOrders = (req, res, next) => {
 //   res.render('shop/orders', {
