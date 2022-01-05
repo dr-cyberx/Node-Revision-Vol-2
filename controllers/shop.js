@@ -32,15 +32,20 @@ exports.getIndex = async (req, res, next) => {
   });
 };
 
-exports.getCart = (req, res, next) => {
-  req.user.populate("cart.items.productId").then((products) => {
-    console.log(products);
-    res.render("shop/cart", {
-      path: "shop/cart",
-      pageTitle: "Your cart",
-      products,
-    });
+exports.getCart = async (req, res, next) => {
+  const response = await req.user.populate("cart.items.productId");
+  // console.log(response);
+  // .exec()
+  // .then((user) => {
+  console.log(response.cart.items);
+  const products = [...response.cart.items];
+  console.log(products)
+  res.render("shop/cart", {
+    path: "shop/cart",
+    pageTitle: "Your cart",
+    products,
   });
+  // });
 };
 
 exports.postCart = (req, res, next) => {
